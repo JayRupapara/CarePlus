@@ -31,7 +31,7 @@ const PatientSidebar = () => {
             >
               <div className="flex items-center space-x-2">
                 <MdSpaceDashboard className="w-5 h-5" />
-                <span>Dashboard</span>
+                <span>Home</span>
               </div>
             </Link>
           </li>
@@ -42,7 +42,7 @@ const PatientSidebar = () => {
             >
               <div className="flex items-center space-x-2">
                 <HiPlusCircle className="w-5 h-5" />
-                <span>Add New Quiz</span>
+                <span>Appointments</span>
               </div>
             </Link>
           </li>
@@ -53,7 +53,7 @@ const PatientSidebar = () => {
             >
               <div className="flex items-center space-x-2">
                 <HiBookOpen className="w-5 h-5" />
-                <span>Manage Quiz</span>
+                <span>Lab Reports</span>
               </div>
             </Link>
           </li>
@@ -64,7 +64,7 @@ const PatientSidebar = () => {
             >
               <div className="flex items-center space-x-2">
                 <HiChatAlt className="w-5 h-5" />
-                <span>Manage Feedbacks</span>
+                <span>Events</span>
               </div>
             </Link>
           </li>
@@ -75,7 +75,7 @@ const PatientSidebar = () => {
             >
               <div className="flex items-center space-x-2">
                 <IoMdSettings className="w-5 h-5" />
-                <span>System Feedbacks</span>
+                <span>Students</span>
               </div>
             </Link>
           </li>
