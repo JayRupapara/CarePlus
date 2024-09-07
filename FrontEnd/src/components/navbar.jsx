@@ -60,12 +60,13 @@ const Navbar = () => {
             {showLoginDropdown && (
               <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-300 bg-white shadow-lg">
                 <Link
+                to={"/login-patient"}
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
                   Sign in as User
                 </Link>
                 <Link
-                  
+                  to={"/login-hospital"}
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
                   Sign in as Hospital Admin
@@ -88,7 +89,7 @@ const Navbar = () => {
             {showRegisterDropdown && (
               <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-300 bg-white shadow-lg">
                 <Link
-                  href="#register-user"
+                  to={"/register-patient"}
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
                   Register as User

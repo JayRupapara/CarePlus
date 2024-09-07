@@ -4,7 +4,7 @@ const Dashboard = () => {
     return (
         <>
             <div className=''>
-               Hospital Dashboard
+               
             </div>
         </>
     )

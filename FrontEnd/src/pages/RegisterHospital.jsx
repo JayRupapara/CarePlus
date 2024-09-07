@@ -1,141 +1,217 @@
-import React from 'react'
-import Navbar from '../components/navbar'
+import React, { useState } from 'react';
+import Navbar from '../components/navbar';
 
 const RegisterHospital = () => {
-  return (
-    <>  
-    <div className='bg-background h-screen'>    
-        <Navbar/>
-        <div className="container mt-10 mx-auto bg-background  p-4">
+  // Define state for form fields
+  const [formData, setFormData] = useState({
+    hospitalName: '',
+    hospitalType: '',
+    phoneNumber: '',
+    registrationNumber: '',
+    hospitalWebsite: '',
+    adminName: '',
+    hospitalState: '',
+    hospitalCity: '',
+    hospitalAddress: '',
+    email: '',
+    password: ''
+  });
 
+  // Handle input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/hospitals/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        alert('Hospital registered successfully!');
+        setFormData({  // Reset form data
+          hospitalName: '',
+          hospitalType: '',
+          phoneNumber: '',
+          registrationNumber: '',
+          hospitalWebsite: '',
+          adminName: '',
+          hospitalState: '',
+          hospitalCity: '',
+          hospitalAddress: '',
+          email: '',
+          password: ''
+        });
+      } else {
+        const errorData = await response.json();
+        alert('Error: ' + errorData.message);
+      }
+    } catch (error) {
+      alert('An error occurred: ' + error.message);
+    }
+  };
+
+  return (
+    <>
+      <div className='bg-background h-screen'>
+        <Navbar />
+        <div className="container mt-10 mx-auto  bg-white rounded-2xl p-6">
           <h1 className="text-primary text-3xl font-semibold mb-8">Register Hospital</h1>
 
-          <form className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 gap-6">
-            {/* Hospital Name */}
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Hospital Name</label>
+              <label className="block text-secondary mb-2">Hospital Name</label>
               <input
                 type="text"
+                name="hospitalName"
+                value={formData.hospitalName}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Hospital Name"
               />
             </div>
-
-            {/* Hospital Type */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Hospital Type</label>
-              <input
-                type="text"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter Hospital Type"
-              />
+              <label className="block text-secondary mb-2">Hospital Type</label>
+              <select
+                name="hospitalType"
+                value={formData.hospitalType}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option selected disabled>Select Hospital Type</option>
+                <option value="Government">Government</option>
+                <option value="Private">Private</option>
+              </select>
             </div>
-
-            {/* Phone Number */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Phone Number</label>
+              <label className="block text-secondary mb-2">Phone Number</label>
               <input
                 type="text"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Phone Number"
               />
             </div>
-
-            {/* Registration Number */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Registration Number</label>
+              <label className="block text-secondary mb-2">Registration Number</label>
               <input
                 type="text"
+                name="registrationNumber"
+                value={formData.registrationNumber}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Registration Number"
               />
             </div>
-
-            {/* Hospital Website */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Hospital Website</label>
+              <label className="block text-secondary mb-2">Hospital Website</label>
               <input
                 type="text"
+                name="hospitalWebsite"
+                value={formData.hospitalWebsite}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Hospital Website"
               />
             </div>
-
-            {/* Admin Name */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Hospital Admin Full Name</label>
+              <label className="block text-secondary mb-2">Hospital Admin Full Name</label>
               <input
                 type="text"
+                name="adminName"
+                value={formData.adminName}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Admin Name"
               />
             </div>
-
-            {/* Hospital State */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Hospital State</label>
-              <input
-                type="text"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter State"
-              />
+              <label className="block text-secondary mb-2">Hospital State</label>
+              <select
+                name="hospitalState"
+                value={formData.hospitalState}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option selected disabled>Select State</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Delhi">Delhi</option>
+              </select>
             </div>
-
-            {/* Hospital City */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Hospital City</label>
-              <input
-                type="text"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter City"
-              />
+              <label className="block text-secondary mb-2">Hospital City</label>
+              <select
+                name="hospitalCity"
+                value={formData.hospitalCity}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option selected disabled>Select City</option>
+                <option value="Rajkot">Rajkot</option>
+                <option value="Surat">Surat</option>
+                <option value="Ahmadabad">Ahmadabad</option>
+              </select>
             </div>
-
-            {/* Address */}
             <div className="lg:col-span-4">
-              <label className="block text-xl text-gray-800 mb-2">Hospital Address</label>
+              <label className="block text-secondary mb-2">Hospital Address</label>
               <textarea
+                name="hospitalAddress"
+                value={formData.hospitalAddress}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Hospital Address"
                 rows="4"
               ></textarea>
             </div>
-
-            {/* Email */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Email</label>
+              <label className="block text-secondary mb-2">Email</label>
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Email"
               />
             </div>
-
-            {/* Password */}
             <div>
-              <label className="block text-xl text-gray-800 mb-2">Password</label>
+              <label className="block text-secondary mb-2">Password</label>
               <input
                 type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter Password"
               />
             </div>
-
-            {/* Register Button */}
             <div className='h-full flex items-end'>
               <button
                 type="submit"
-                className="px-6 py-3  bg-red-500 text-white font-semibold text-xl rounded-2xl hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-6 py-3 bg-primary text-white font-semibold rounded-2xl hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 Register
               </button>
             </div>
-
           </form>
         </div>
-        </div>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default RegisterHospital
+export default RegisterHospital;

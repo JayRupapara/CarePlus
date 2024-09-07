@@ -9,6 +9,9 @@ import RegisterHospital from './pages/RegisterHospital.jsx';
 import HospitalDashboard from './dashbaords/hospital/HospitalDashboard.jsx';
 import Error404 from './pages/Error404.jsx';
 import PatientDashboard from './dashbaords/patient/PatientDashboard.jsx';
+import LoginPatient from './pages/LoginPatient.jsx';
+import LoginHospital from './pages/LoginHospital.jsx';
+import RegisterPatient from './pages/RegisterPatient.jsx';
 
 
 const router = createBrowserRouter([
@@ -23,6 +26,18 @@ const router = createBrowserRouter([
       {
         path: "/register-hospital",
         element:<RegisterHospital/>    
+      },
+      {
+        path: "/register-patient",
+        element:<RegisterPatient/>    
+      },
+      {
+        path: "/login-patient",
+        element:<LoginPatient/>    
+      },
+      {
+        path: "/login-hospital",
+        element:<LoginHospital/>    
       },
       {
         path: "/hospital/*",
