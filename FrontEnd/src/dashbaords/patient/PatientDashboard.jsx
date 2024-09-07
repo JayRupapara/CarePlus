@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FaBarsStaggered } from "react-icons/fa6";
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 // import { parseJwt } from '../model/JwtDecode';
 import { FaUserAlt } from "react-icons/fa";
 import PatientSidebar from './PatientSideBar';
 import Dashboard from '../../pages/patient/dashboard';
+import Appointments from '../../pages/patient/appointments';
+import Labreports from '../../pages/patient/labreports';
+import Settings from '../../pages/patient/settings';
+import Notification from '../../pages/patient/notification';
+
 
 
 function PatientDashboard() {
@@ -62,14 +67,12 @@ function PatientDashboard() {
               <FaBarsStaggered className='text-xl cursor-pointer ' onClick={toggleSidebar} />
               <h2 className='font-semibold  sm:text-2xl text-lg'>
                 <Routes>
-                  <Route path='/dashboard' element={'Dashboard'}></Route>
-                  <Route path='/add-quiz' element={'Add Quiz'}></Route>
-                  <Route path='/manage-quiz' element={'Manage Quiz'}></Route>
-                  <Route exact path='/view-quiz/:id' element={'View Quiz'}></Route>
-                  <Route path='/view-data/*' element={'View Data'}></Route>
-                  <Route path='/manage-feedbacks' element={'Manage Feedbacks'}></Route>
-                  <Route path='/system-feedbacks' element={'System Feedbacks'}></Route>
-                  <Route path='/update-quiz/*' element={'Update Quiz'}></Route>
+                  <Route path='/dashboard' element={'Home'}></Route>
+                  <Route path='/appointments' element={'Appointments'}></Route>
+                  <Route path='/labreports' element={'lab Reports'}></Route>
+                  <Route path='/notification' element={'Notification'}></Route>
+                  <Route path='/settings' element={'Settings'}></Route>
+                  <Route path='*' element={'logout'}></Route>
                 </Routes>
               </h2>
             </div>
@@ -83,19 +86,17 @@ function PatientDashboard() {
           </div>
 
           <div className='px-3'>
-            <div className='p-5 mt-2  bg-white rounded-xl'>
-              <Routes>
-                <Route path='/' element={<Dashboard/>}></Route>
-                <Route path='/dashboard' element={<Dashboard/>}></Route>
-                <Route path='/add-quiz' element={'Dashboard'}></Route>
-                <Route path='/manage-quiz' element={'Dashboard'}></Route>
-                <Route exact path='/view-quiz/:id' element={'Dashboard'}></Route>
-                <Route path='/manage-feedbacks' element={'Dashboard'}></Route>
-                <Route path='/view-data/:id' element={'Dashboard'}></Route>
-                <Route path='/system-feedbacks' element={'Dashboard'}></Route>
-                <Route path='/update-quiz/:id' element={'Dashboard'}></Route>
-                <Route path='*' element={'Dashboard'}></Route>
-              </Routes>
+            <div className='mt-2 '>
+            <Routes>
+  {/* This route redirects /patient to /patient/dashboard */}
+  <Route path="/" element={<Navigate to="/patient/dashboard" />} />
+  <Route path="/dashboard" element={<Dashboard />} />
+  <Route path="/appointments" element={<Appointments />} />
+  <Route path="/labreports" element={<Labreports />} />
+  <Route path="/notification" element={<Notification />} />
+  <Route path="/settings" element={<Settings />} />
+  <Route path="*" element={'Dashboard'} />
+</Routes>
             </div>
           </div>
 
