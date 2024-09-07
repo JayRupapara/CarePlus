@@ -11,10 +11,16 @@ export default {
         secondary : "#040774",
         background : "#F6F6F6",
       },
+      backgroundColor:{
+        primary: "#FC4D4D",
+      },
       boxShadow: {
         'red': '#FC4D4D 0px 7px 29px -10px',
         'blue':'#040774 0px 7px 29px -10px'
-      }
+      },
+      backgroundImage: {
+        'custom-bg': "url('/src/assets/bg.jpg')", 
+      },
     },
   },
   plugins: [],
