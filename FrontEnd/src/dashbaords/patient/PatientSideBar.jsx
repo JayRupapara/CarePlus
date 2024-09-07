@@ -19,7 +19,7 @@ const PatientSidebar = () => {
 
 
   return (
-    <div className=" flex flex-col bg-white text-light h-screen overflow-hidden">
+    <div className=" flex flex-col bg-white text-light h-screen overflow-hidden relative z-10">
       <div className="flex items-center justify-center p-4">
         <img src={logo} width={200} alt="" className=' ' />
       </div>

@@ -2,10 +2,10 @@ import React from 'react';
 
 const Dashboard = () => {
   return (
-    <div className="PersonalDetails w-full max-w-7xl mx-auto p-4">
+    <div className="PersonalDetails w-full ">
       {/* Main Container */}
-      <div className="Main bg-white rounded-2xl shadow border border-gray-50 p-6 md:flex justify-between">
-        
+      <div className="Main bg-white rounded-2xl shadow-md shadow-gray-100 border border-gray-50 p-6 md:flex justify-between">
+
         {/* Patient Details Section */}
         <div className="PatientsDetails flex flex-col justify-start items-start gap-2 w-full">
           <h1 className="text-3xl md:text-2xl font-semibold">John Patel</h1>
@@ -36,7 +36,7 @@ const Dashboard = () => {
         </div>
 
         {/* QR Code Section */}
-        <div className="Qr bg-white rounded-2xl shadow p-6 flex flex-col items-center">
+        <div className="Qr bg-white rounded-2xl shadow-md shadow-gray-100 p-6 flex flex-col items-center">
           <img
             className="w-40 h-40 mb-4"
             src="https://via.placeholder.com/340x316"
@@ -55,7 +55,7 @@ const Dashboard = () => {
       {/* Health Information and Appointment History */}
       <div className="Health-Info-Appointments mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Health Information */}
-        <div className="HealthInfo bg-white rounded-2xl shadow p-6">
+        <div className="HealthInfo bg-white rounded-2xl shadow-md shadow-gray-100 p-6">
           <h2 className="text-lg font-semibold mb-4">Blood Pressure (BP)</h2>
           <p className="text-base font-medium">
             Systolic Pressure (mmHg): <span className="font-normal">80</span>
@@ -70,7 +70,7 @@ const Dashboard = () => {
         </div>
 
         {/* Appointment History */}
-        <div className="AppointmentHistory bg-white rounded-2xl shadow p-6">
+        <div className="AppointmentHistory bg-white rounded-2xl shadow-md shadow-gray-100 p-6">
           <h2 className="text-lg font-semibold mb-4">Upcoming Appointments</h2>
           <p className="text-base font-medium">
             Doctor Name | Time: <span className="font-normal">10:40AM</span>
@@ -87,7 +87,7 @@ const Dashboard = () => {
       </div>
 
       {/* Doctor's Notes and Prescriptions Section */}
-      <div className="DoctorsNotes mt-6 bg-white rounded-2xl shadow p-6 flex flex-col">
+      <div className="DoctorsNotes mt-6 bg-white rounded-2xl shadow-md shadow-gray-100 p-6 flex flex-col">
         <div className="w-full flex gap-4">
           <img
             className="w-12 h-12 mb-2 inline-block"

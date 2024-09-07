@@ -55,9 +55,9 @@ function PatientDashboard() {
           <PatientSidebar />
         </div>
 
-        <div className={`${sidebarOpen ? 'sm:col-span-5 col-span-3 ' : ' sm:col-span-6 col-span-6'}  h-screen overflow-y-auto  overflow-x-hidden`}>
+        <div className={`${sidebarOpen ? 'sm:col-span-5 col-span-3 ' : ' sm:col-span-6 col-span-6 '}  h-screen overflow-y-auto  overflow-x-hidden`}>
 
-          <div className='z-10  text-secondary flex justify-between items-center py-4 px-4 w-full  bg-white'>
+          <div className='text-secondary relative z-10 flex justify-between items-center py-4 px-4 w-full  bg-white'>
             <div className='flex justify-center  items-center sm:gap-10 gap-5'>
               <FaBarsStaggered className='text-xl cursor-pointer ' onClick={toggleSidebar} />
               <h2 className='font-semibold  sm:text-2xl text-lg'>
@@ -83,19 +83,39 @@ function PatientDashboard() {
           </div>
 
           <div className='px-3'>
-            <div className='p-5 mt-2  bg-white rounded-xl'>
-              <Routes>
-                <Route path='/' element={<Dashboard/>}></Route>
-                <Route path='/dashboard' element={<Dashboard/>}></Route>
-                <Route path='/add-quiz' element={'Dashboard'}></Route>
-                <Route path='/manage-quiz' element={'Dashboard'}></Route>
-                <Route exact path='/view-quiz/:id' element={'Dashboard'}></Route>
-                <Route path='/manage-feedbacks' element={'Dashboard'}></Route>
-                <Route path='/view-data/:id' element={'Dashboard'}></Route>
-                <Route path='/system-feedbacks' element={'Dashboard'}></Route>
-                <Route path='/update-quiz/:id' element={'Dashboard'}></Route>
-                <Route path='*' element={'Dashboard'}></Route>
-              </Routes>
+            <div className="mt-2">
+              {/* Background */}
+              <div className="BackgroundPatternDesign w-screen h-screen flex flex-nowrap fixed top-0 right-0 z-0">
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
+              </div>
+
+              {/* Routes */}
+              <div className="relative z-10">
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/add-quiz" element={<Dashboard />} />
+                  <Route path="/manage-quiz" element={<Dashboard />} />
+                  <Route exact path="/view-quiz/:id" element={<Dashboard />} />
+                  <Route path="/manage-feedbacks" element={<Dashboard />} />
+                  <Route path="/view-data/:id" element={<Dashboard />} />
+                  <Route path="/system-feedbacks" element={<Dashboard />} />
+                  <Route path="/update-quiz/:id" element={<Dashboard />} />
+                  <Route path="*" element={<Dashboard />} />
+                </Routes>
+              </div>
             </div>
           </div>
 
