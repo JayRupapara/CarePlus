@@ -5,6 +5,8 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import HospitalSidebar from './HospitalSideBar';
 import { FaHospital } from "react-icons/fa6";
 import Dashboard from '../../pages/hospital/dashboard';
+import Doctors from '../../pages/hospital/Doctors';
+import RegisterNewPatient from '../../pages/hospital/RegisterNewPatient';
 
 
 function HospitalDashboard() {
@@ -63,8 +65,8 @@ function HospitalDashboard() {
               <h2 className='font-semibold  sm:text-2xl text-lg'>
                 <Routes>
                   <Route path='/dashboard' element={'Dashboard'}></Route>
-                  <Route path='/add-quiz' element={'Add Quiz'}></Route>
-                  <Route path='/manage-quiz' element={'Manage Quiz'}></Route>
+                  <Route path='/doctors' element={'Manage Doctors'}></Route>
+                  <Route path='/register-patient' element={'Register Patient'}></Route>
                   <Route exact path='/view-quiz/:id' element={'View Quiz'}></Route>
                   <Route path='/view-data/*' element={'View Data'}></Route>
                   <Route path='/manage-feedbacks' element={'Manage Feedbacks'}></Route>
@@ -88,8 +90,8 @@ function HospitalDashboard() {
               <Routes>
                 <Route path='/' element={<Dashboard />}></Route>
                 <Route path='/dashboard' element={<Dashboard />}></Route>
-                <Route path='/add-quiz' element={'Dashboard'}></Route>
-                <Route path='/manage-quiz' element={'Dashboard'}></Route>
+                <Route path='/doctors' element={<Doctors/>}></Route>
+                <Route path='/register-patient' element={<RegisterNewPatient/>}></Route>
                 <Route exact path='/view-quiz/:id' element={'Dashboard'}></Route>
                 <Route path='/manage-feedbacks' element={'Dashboard'}></Route>
                 <Route path='/view-data/:id' element={'Dashboard'}></Route>

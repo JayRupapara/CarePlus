@@ -83,5 +83,38 @@ router.post('/send-email', async (req, res) => {
 });
 
 
+
+
+
+
+router.get('/doctor-appointments/:doctorId', verifyToken, checkRole('hospital'), (req, res) => {
+  const doctorId = req.params.doctorId;
+
+  const query = `
+      SELECT 
+          (SELECT COUNT(*) FROM PatientAppointment WHERE DID = ? AND status = 'completed') AS completedAppointments,
+          (SELECT COUNT(*) FROM PatientAppointment WHERE DID = ?) AS totalAppointments,
+          JSON_ARRAYAGG(
+              JSON_OBJECT(
+                  'patientName', pd.Pname,
+                  'gender', pd.Pgender,
+                  'appointmentDate', pa.created_at
+              )
+          ) AS appointmentList
+      FROM PatientAppointment pa
+      JOIN PatientDetails pd ON pa.PID = pd.PID
+      WHERE pa.DID = ? AND pa.status = 'completed'`;
+
+  pool.query(query, [doctorId, doctorId, doctorId], (error, results) => {
+      if (error) {
+          console.error(error);
+          return res.status(500).json({ error: 'Error fetching doctor appointments' });
+      }
+      res.json(results[0]);
+  });
+});
+
+
+
 module.exports = router;
 

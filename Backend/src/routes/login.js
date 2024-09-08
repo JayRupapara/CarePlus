@@ -90,4 +90,72 @@ router.post('/login', (req, res) => {
 
 
 
+
+router.post('/login-hospital', (req, res) => {
+    const { email, password } = req.body;
+
+    const query = 'SELECT * FROM hospital WHERE Hemail = ?';
+    pool.query(query, [email], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const hospital = results[0];
+
+        // Simple password comparison without bcrypt
+        if (hospital.Hpassword !== password) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign(
+            { id: hospital.HID, role: 'hospital' },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.json({ token, hospitalId: hospital.HID });
+    });
+});
+
+
+
+router.post('/login-patient', (req, res) => {
+    const { email, password } = req.body;
+
+    const query = 'SELECT * FROM patientdetails WHERE Pemail = ?';
+    pool.query(query, [email], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const patient = results[0];
+
+        // Simple password comparison
+        if (patient.Ppassword !== password) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign(
+            { id: patient.PID, role: 'patient' },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.json({ token, patientId: patient.PID });
+    });
+});
+
+
+
+
+
+
 module.exports = router;
