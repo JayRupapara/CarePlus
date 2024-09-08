@@ -70,7 +70,7 @@ function PatientDashboard() {
                   <Route path='/dashboard' element={'Home'}></Route>
                   <Route path='/appointments' element={'Appointments'}></Route>
                   <Route path='/labreports' element={'lab Reports'}></Route>
-                  <Route path='/notification' element={'Notification'}></Route>
+                  {/* <Route path='/notification' element={'Notification'}></Route> */}
                   <Route path='/settings' element={'Settings'}></Route>
                   <Route path='*' element={'logout'}></Route>
                 </Routes>
@@ -93,7 +93,7 @@ function PatientDashboard() {
   <Route path="/dashboard" element={<Dashboard />} />
   <Route path="/appointments" element={<Appointments />} />
   <Route path="/labreports" element={<Labreports />} />
-  <Route path="/notification" element={<Notification />} />
+  {/* <Route path="/notification" element={<Notification />} /> */}
   <Route path="/settings" element={<Settings />} />
   <Route path="*" element={'Dashboard'} />
 </Routes>

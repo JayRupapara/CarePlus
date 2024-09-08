@@ -58,7 +58,7 @@ const PatientSidebar = () => {
               </div>
             </Link>
           </li>
-          <li className={`p-4 rounded-xl ${path == "/faculty/manage-feedbacks" ? "bg-white shadow-2xl text-secondary" : ""}  `}>
+          {/* <li className={`p-4 rounded-xl ${path == "/faculty/manage-feedbacks" ? "bg-white shadow-2xl text-secondary" : ""}  `}>
             <Link
               to="./notification"
 
@@ -68,7 +68,7 @@ const PatientSidebar = () => {
                 <span>Notification</span>
               </div>
             </Link>
-          </li>
+          </li> */}
           <li className={`p-4 rounded-xl ${path == "/faculty/system-feedbacks" ? "bg-white text-secondary" : ""}  `}>
             <Link
               to="./settings"
