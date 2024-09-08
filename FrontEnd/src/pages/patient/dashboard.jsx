@@ -7,7 +7,7 @@ const Dashboard = () => {
       <div className="Main bg-white rounded-2xl shadow-md shadow-gray-100 border border-gray-50 p-6 md:flex justify-between">
 
         {/* Patient Details Section */}
-        <div className="PatientsDetails flex flex-col justify-start items-start gap-2 w-full">
+        <div className="PatientsDetails flex flex-col justify-start items-start gap-2 w-">
           <h1 className="text-3xl md:text-2xl font-semibold">John Patel</h1>
           <p className="text-lg md:text-base font-medium">
             Date of Birth (DOB): <span className="font-normal">02-02-2000</span>
@@ -39,7 +39,7 @@ const Dashboard = () => {
         <div className="Qr bg-white rounded-2xl shadow-md shadow-gray-100 p-6 flex flex-col items-center">
           <img
             className="w-40 h-40 mb-4"
-            src="https://via.placeholder.com/340x316"
+            src="https://pngimg.com/uploads/qr_code/qr_code_PNG10.png"
             alt="QR Code"
           />
           <p className="text-xl font-medium">Patient Name</p>
