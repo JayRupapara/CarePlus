@@ -128,44 +128,50 @@ app.post('/register-hospital', async (req, res) => {
 
 
 // 2. Hospital Home API
-app.get('/hospital-home/:hospitalId', verifyToken, checkRole('hospital'), (req, res) => {
+router.get('/hospital-home/:hospitalId', verifyToken, checkRole('hospital'), (req, res) => {
   const hospitalId = req.params.hospitalId;
 
   const query = `
       SELECT 
-          h.Hname AS hospitalName,
-          COUNT(DISTINCT d.DID) AS availableDoctors,
-          (SELECT COUNT(*) FROM Doctor WHERE HID = ?) AS totalDoctors,
-          hb.remaining_beds AS remainingBeds,
-          hb.total_beds AS totalBeds,
-          (SELECT COUNT(*) FROM PatientAppointment WHERE HID = ? AND status = 'completed') AS totalVisitedPatients,
-          (SELECT COUNT(*) FROM PatientAppointment WHERE HID = ? AND status = 'pending') AS totalQueuedPatients,
-          (SELECT JSON_ARRAYAGG(JSON_OBJECT('name', pd.Pname, 'date', pa.created_at))
-           FROM PatientAppointment pa
-           JOIN PatientDetails pd ON pa.PID = pd.PID
-           WHERE pa.HID = ?
-           ORDER BY pa.created_at DESC
-           LIMIT 5) AS recentlyRegisteredPatients,
-          (SELECT JSON_ARRAYAGG(JSON_OBJECT('patientName', pd.Pname, 'doctorName', d.Dname, 'date', pa.created_at))
-           FROM PatientAppointment pa
-           JOIN PatientDetails pd ON pa.PID = pd.PID
-           JOIN Doctor d ON pa.DID = d.DID
-           WHERE pa.HID = ? AND pa.status = 'pending'
-           ORDER BY pa.created_at ASC) AS waitingQueue
-      FROM Hospital h
-      LEFT JOIN Doctor d ON h.HID = d.HID
-      LEFT JOIN Hospital_Beds hb ON h.HID = hb.HID
-      WHERE h.HID = ?
-      GROUP BY h.HID`;
+    h.Hname AS hospitalName,
+    COUNT(DISTINCT d.DID) AS availableDoctors,
+    (SELECT COUNT(*) FROM Doctor WHERE HID = ?) AS totalDoctors,
+    hb.remaining_beds AS remainingBeds,
+    hb.total_beds AS totalBeds,
+    (SELECT COUNT(*) FROM appointment WHERE HID = ? AND status = 'completed') AS totalVisitedPatients,
+    (SELECT COUNT(*) FROM appointment WHERE HID = ? AND status = 'scheduled') AS totalQueuedPatients,
+    (SELECT GROUP_CONCAT(CONCAT(pd.Pname, '|', a.created_at) SEPARATOR ',')
+     FROM (
+         SELECT PID, created_at
+         FROM appointment
+         WHERE HID = ?
+         ORDER BY created_at DESC
+         LIMIT 5
+     ) a
+     JOIN PatientDetails pd ON a.PID = pd.PID
+    ) AS recentlyRegisteredPatients,
+    (SELECT GROUP_CONCAT(CONCAT(pd.Pname, '|', d.Dname, '|', a.created_at) SEPARATOR ',')
+     FROM appointment a
+     JOIN PatientDetails pd ON a.PID = pd.PID
+     JOIN Doctor d ON a.DID = d.DID
+     WHERE a.HID = ? AND a.status = 'scheduled'
+     ORDER BY a.created_at ASC
+    ) AS waitingQueue
+FROM Hospital h
+LEFT JOIN Doctor d ON h.HID = d.HID
+LEFT JOIN Hospital_Beds hb ON h.HID = hb.HID
+WHERE h.HID = ?
+GROUP BY h.HID`;
 
-  pool.query(query, [hospitalId, hospitalId, hospitalId, hospitalId, hospitalId, hospitalId], (error, results) => {
+  connection.query(query, [hospitalId, hospitalId, hospitalId, hospitalId, hospitalId, hospitalId], (error, results) => {
       if (error) {
           console.error(error);
           return res.status(500).json({ error: 'Error fetching hospital data' });
       }
       res.json(results[0]);
   });
-});
+});    //tested
+
 
 
 router.get('/todays-patients/:hospitalId', verifyToken, checkRole('hospital'), (req, res) => {
@@ -204,8 +210,8 @@ app.get('/patient-queue/:hospitalId', verifyToken, checkRole('hospital'), (req, 
 
   const query = `
       SELECT 
-          (SELECT COUNT(*) FROM PatientAppointment WHERE HID = ? AND status = 'completed') AS completedQueue,
-          (SELECT COUNT(*) FROM PatientAppointment WHERE HID = ? AND status = 'pending') AS pendingQueue,
+          (SELECT COUNT(*) FROM appointment WHERE HID = ? AND status = 'completed') AS completedQueue,
+          (SELECT COUNT(*) FROM appointment WHERE HID = ? AND status = 'pending') AS pendingQueue,
           JSON_ARRAYAGG(
               JSON_OBJECT(
                   'patientName', pd.Pname,
@@ -214,7 +220,7 @@ app.get('/patient-queue/:hospitalId', verifyToken, checkRole('hospital'), (req, 
                   'appointmentTime', pa.created_at
               )
           ) AS queueList
-      FROM PatientAppointment pa
+      FROM appointment pa
       JOIN PatientDetails pd ON pa.PID = pd.PID
       JOIN Doctor d ON pa.DID = d.DID
       WHERE pa.HID = ? AND pa.status = 'pending'
@@ -236,7 +242,7 @@ app.get('/patient-queue/:hospitalId', verifyToken, checkRole('hospital'), (req, 
 app.post('/new-appointment', verifyToken, checkRole('hospital'), (req, res) => {
   const { patientId, doctorId, hospitalId, visitReason } = req.body;
 
-  const query = `INSERT INTO PatientAppointment (PID, DID, HID, visit_reason, status) 
+  const query = `INSERT INTO appointment (PID, DID, HID, visit_reason, status) 
                  VALUES (?, ?, ?, ?, 'pending')`;
 
   pool.query(query, [patientId, doctorId, hospitalId, visitReason], (error, results) => {
