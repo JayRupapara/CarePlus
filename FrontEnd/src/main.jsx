@@ -14,6 +14,7 @@ import LoginHospital from './pages/LoginHospital.jsx';
 import RegisterPatient from './pages/RegisterPatient.jsx';
 import Contact from './pages/Contact.jsx';
 import About from './pages/About.jsx';
+import DoctorDashboard from './dashbaords/doctor/DoctorDashboard.jsx';
 
 
 const router = createBrowserRouter([
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "/patient/*",
         element:<PatientDashboard/>    
+      },
+      {
+        path: "/doctor/*",
+        element:<DoctorDashboard/>    
       },
       {
         path: "*",
