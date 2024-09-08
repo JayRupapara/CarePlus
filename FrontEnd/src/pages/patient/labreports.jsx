@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-const appointments = () => {
+const LabReports = () => {
   // Sample data based on the image
   const appointmentData = [
     {
@@ -52,7 +52,7 @@ const appointments = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default appointments;
+export default LabReports

@@ -24,7 +24,7 @@ const PatientSidebar = () => {
       <div className="flex items-center justify-center p-4">
         <img src={logo} width={200} alt="" className=' ' />
       </div>
-      <nav className="flex-grow  py-4 px-6">
+      <nav className="flex-grow text-gray-600 py-4 px-6">
         <ul className='flex flex-col gap-4'>
           <li className={`p-3 rounded-xl ${path == "/patient/dashboard"  ? "bg-primary text-white" : ""}  `}>
             <Link

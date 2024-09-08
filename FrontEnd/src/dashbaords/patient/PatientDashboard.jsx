@@ -5,6 +5,11 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { FaUserAlt } from "react-icons/fa";
 import PatientSidebar from './PatientSideBar';
 import Dashboard from '../../pages/patient/dashboard';
+import Appointments from '../../pages/patient/Appointments';
+import LabReports from '../../pages/patient/labreports';
+import Settings from '../../pages/patient/settings';
+
+
 
 
 function PatientDashboard() {
@@ -62,23 +67,12 @@ function PatientDashboard() {
               <FaBarsStaggered className='text-xl cursor-pointer ' onClick={toggleSidebar} />
               <h2 className='font-semibold  sm:text-2xl text-lg'>
                 <Routes>
-<<<<<<< HEAD
                   <Route path='/dashboard' element={'Home'}></Route>
                   <Route path='/appointments' element={'Appointments'}></Route>
                   <Route path='/labreports' element={'lab Reports'}></Route>
                   {/* <Route path='/notification' element={'Notification'}></Route> */}
                   <Route path='/settings' element={'Settings'}></Route>
                   <Route path='*' element={'logout'}></Route>
-=======
-                  <Route path='/dashboard' element={'Dashboard'}></Route>
-                  <Route path='/add-quiz' element={'Add Quiz'}></Route>
-                  <Route path='/manage-quiz' element={'Manage Quiz'}></Route>
-                  <Route exact path='/view-quiz/:id' element={'View Quiz'}></Route>
-                  <Route path='/view-data/*' element={'View Data'}></Route>
-                  <Route path='/manage-feedbacks' element={'Manage Feedbacks'}></Route>
-                  <Route path='/system-feedbacks' element={'System Feedbacks'}></Route>
-                  <Route path='/update-quiz/*' element={'Update Quiz'}></Route>
->>>>>>> ba01a7f8d597aae735f26126eb7c895ca90b8c57
                 </Routes>
               </h2>
             </div>
@@ -92,53 +86,17 @@ function PatientDashboard() {
           </div>
 
           <div className='px-3'>
-<<<<<<< HEAD
             <div className='mt-2 '>
-            <Routes>
-  {/* This route redirects /patient to /patient/dashboard */}
-  <Route path="/" element={<Navigate to="/patient/dashboard" />} />
-  <Route path="/dashboard" element={<Dashboard />} />
-  <Route path="/appointments" element={<Appointments />} />
-  <Route path="/labreports" element={<Labreports />} />
-  {/* <Route path="/notification" element={<Notification />} /> */}
-  <Route path="/settings" element={<Settings />} />
-  <Route path="*" element={'Dashboard'} />
-</Routes>
-=======
-            <div className="mt-2">
-              {/* Background */}
-              <div className="BackgroundPatternDesign w-screen h-screen flex flex-nowrap fixed top-0 right-0 z-0">
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-                <div className="w-[100px] h-screen border-r border-[#d9d9d9]"></div>
-              </div>
-
-              {/* Routes */}
-              <div className="relative z-10">
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/add-quiz" element={<Dashboard />} />
-                  <Route path="/manage-quiz" element={<Dashboard />} />
-                  <Route exact path="/view-quiz/:id" element={<Dashboard />} />
-                  <Route path="/manage-feedbacks" element={<Dashboard />} />
-                  <Route path="/view-data/:id" element={<Dashboard />} />
-                  <Route path="/system-feedbacks" element={<Dashboard />} />
-                  <Route path="/update-quiz/:id" element={<Dashboard />} />
-                  <Route path="*" element={<Dashboard />} />
-                </Routes>
-              </div>
->>>>>>> ba01a7f8d597aae735f26126eb7c895ca90b8c57
+              <Routes>
+                {/* This route redirects /patient to /patient/dashboard */}
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/appointments" element={<Appointments/>} />
+                <Route path="/labreports" element={<LabReports/>} />
+                {/* <Route path="/notification" element={<Notification />} /> */}
+                <Route path="/settings" element={<Settings />} />
+                <Route path="*" element={'Dashboard'} />
+              </Routes>
             </div>
           </div>
 

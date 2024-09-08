@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-const appointments = () => {
+const Appointments = () => {
   // Sample data based on the image
   const appointmentData = [
     {
@@ -26,7 +26,7 @@ const appointments = () => {
   return (
     <div className="w-full max-w-7xl mx-auto p-4">
       {/* Main Container */}
-        <h2 className="text-2xl font-semibold mb-4 text-center">Your Appointment History</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">Your Appointment History</h2>
       <div className="Main bg-white rounded-2xl shadow border border-gray-50 p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-collapse">
@@ -52,7 +52,7 @@ const appointments = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default appointments;
+export default Appointments
