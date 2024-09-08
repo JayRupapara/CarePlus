@@ -101,8 +101,8 @@ router.get('/hospital/dashboard/:hospitalId', async (req, res) => {
 
 
 
-// 1. Register Hospital API
-app.post('/register-hospital', async (req, res) => {
+//  Register Hospital API
+router.post('/register-hospital',verifyToken, checkRole('hospital'), async (req, res) => {
   const {
       hospitalName, hospitalType, phoneNumber, registrationNumber,
       hospitalWebsite, adminName, hospitalState, hospitalCity,
@@ -307,6 +307,176 @@ router.post('/register-patient', verifyToken, checkRole('hospital'), (req, res) 
       res.status(201).json({ message: 'Patient registered successfully', patientId: results.insertId });
   });
 });
+
+
+// 3. Add Doctor API (HID from token)
+router.post('/add-doctor', verifyToken, checkRole('hospital'), (req, res) => {
+  const { name, phone_number, specialist_for, education, email, password, available } = req.body;
+  const HID = req.user.HID; // Get HID from token
+
+  const query = `
+  INSERT INTO Doctor (HID, Dname, Dphone_number, specialist_for, education, Demail, Dpassword)
+  VALUES (?, ?, ?, ?, ?, ?, ?)
+`;
+
+connection.query(
+  query, 
+  [HID, name, phone_number, specialist_for, education, email, password], 
+  (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Error adding doctor' });
+    }
+    res.status(201).json({ message: 'Doctor added successfully', doctorId: results.insertId });
+  }
+);
+});  // tested
+
+
+// 1. Return all doctors with details, including pending appointments
+router.get('/doctors', verifyToken, checkRole('hospital'), (req, res) => {
+  const HID = req.user.HID; // Get HID from token
+
+  // Query to get the list of doctors with pending appointments
+  const doctorsQuery = `
+    SELECT D.Dname AS name, D.specialist_for, D.Davailable AS available, 
+           COUNT(A.appointment_id) AS pending_appointments
+    FROM Doctor D
+    LEFT JOIN Appointment A ON D.DID = A.DID AND A.status = 'pending'
+    WHERE D.HID = ?
+    GROUP BY D.DID, D.Dname, D.specialist_for, D.Davailable;
+  `;
+
+  // Query to get the total number of doctors and available doctors
+  const countQuery = `
+    SELECT
+      COUNT(*) AS total_doctors,
+      SUM(CASE WHEN D.Davailable = true THEN 1 ELSE 0 END) AS available_doctors
+    FROM Doctor D
+    WHERE D.HID = ?;
+  `;
+
+  // Execute both queries in parallel
+  connection.query(doctorsQuery, [HID], (error, doctorsResults) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Error fetching doctor details' });
+    }
+
+    connection.query(countQuery, [HID], (error, countResults) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Error fetching doctor counts' });
+      }
+
+      res.status(200).json({
+        doctors: doctorsResults,
+        total_doctors: countResults[0].total_doctors,
+        available_doctors: countResults[0].available_doctors
+      });
+    });
+  });
+});  // tested
+
+
+// API to get all patients and their appointment details for a specific doctor under a specific hospital,
+// including completed and total appointments
+router.get('/doctor/:doctorId/patients', verifyToken, checkRole('hospital'), (req, res) => {
+  const HID = req.user.HID; // Get HID from token
+  const doctorId = req.params.doctorId; // Get doctorId from route parameters
+
+  // Query to get patient details and appointment times
+  const patientsQuery = `
+    SELECT P.Pname AS patient_name, P.Pgender, A.appointment_time
+    FROM patientdetails P
+    JOIN appointment A ON P.PID = A.PID
+    JOIN doctor D ON A.DID = D.DID
+    WHERE D.DID = ? AND D.HID = ?;
+  `;
+
+  // Query to get the total number of appointments and completed appointments
+  const countQuery = `
+    SELECT
+      COUNT(*) AS total_appointments,
+      SUM(CASE WHEN A.status = 'completed' THEN 1 ELSE 0 END) AS completed_appointments
+    FROM appointment A
+    JOIN doctor D ON A.DID = D.DID
+    WHERE D.DID = ? AND D.HID = ?;
+  `;
+
+  // Execute both queries in parallel
+  connection.query(patientsQuery, [doctorId, HID], (error, patientsResults) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Error fetching patient details' });
+    }
+
+    connection.query(countQuery, [doctorId, HID], (error, countResults) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Error fetching appointment counts' });
+      }
+
+      res.status(200).json({
+        patients: patientsResults,
+        total_appointments: countResults[0].total_appointments,
+        completed_appointments: countResults[0].completed_appointments
+      });
+    });
+  });
+});  // tested
+
+
+// API to get all patients with their details including registration date, 
+// and counts of total patients and those registered today for a specific hospital
+router.get('/hospital/:hospitalId/patients', verifyToken, checkRole('hospital'), (req, res) => {
+  const HID = req.user.HID; // Get HID from token
+  const hospitalId = req.params.hospitalId; // Get hospitalId from route parameters
+
+  // Query to get patient details including registration date
+  const patientsQuery = `
+    SELECT P.Pname AS patient_name, P.Pgender AS gender, P.created_at AS registration_date
+    FROM patientdetails P
+    JOIN appointment A ON P.PID = A.PID
+    JOIN doctor D ON A.DID = D.DID
+    WHERE D.HID = ?;
+  `;
+
+  // Query to get the total number of patients and the number of patients registered today
+  const countQuery = `
+    SELECT
+      COUNT(*) AS total_patients,
+      SUM(CASE WHEN DATE(P.created_at) = CURDATE() THEN 1 ELSE 0 END) AS today_registered
+    FROM patientdetails P
+    JOIN appointment A ON P.PID = A.PID
+    JOIN doctor D ON A.DID = D.DID
+    WHERE D.HID = ?;
+  `;
+
+  // Execute both queries in parallel
+  connection.query(patientsQuery, [hospitalId], (error, patientsResults) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Error fetching patient details' });
+    }
+
+    connection.query(countQuery, [hospitalId], (error, countResults) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Error fetching patient counts' });
+      }
+
+      res.status(200).json({
+        patients: patientsResults,
+        total_patients: countResults[0].total_patients,
+        today_registered: countResults[0].today_registered
+      });
+    });
+  });
+});
+
+
+
 
 
 module.exports = router;
