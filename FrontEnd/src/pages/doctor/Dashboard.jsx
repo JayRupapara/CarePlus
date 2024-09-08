@@ -45,7 +45,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-2">
       {/* Header Section */}
-      <div className="flex justify-between items-center bg-white shadow p-4 rounded-lg">
+      <div className="flex justify-between items-center bg-white p-4 rounded-lg">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Dr. Raghav Patel</h1>
           <p className="text-sm text-gray-600">M.B.B.S, M.D</p>
@@ -56,7 +56,7 @@ const Dashboard = () => {
       </div>
 
       {/* Date Section */}
-      <div className="mt-6 bg-white flex justify-between items-center shadow p-4 rounded-lg">
+      <div className="mt-6 bg-white flex justify-between items-center p-4 rounded-lg">
         <p className="text-gray-800">Today: 4 Sep 2024 | 09:47:98 PM</p>
         <div className="flex items-center bg-gray-100 p-2 rounded-full gap-2">
           <button
@@ -77,7 +77,7 @@ const Dashboard = () => {
       {/* Conditional Rendering based on isPageView */}
       {isPageView ? (
         // Simplified view for "Page" mode
-        <div className="mt-6 bg-white shadow p-6 rounded-lg">
+        <div className="mt-6 bg-white p-6 rounded-lg">
           <h2 className="text-xl font-semibold text-gray-800">Jeel Patel</h2>
           <p className="text-gray-600">Age: 20</p>
           <p className="text-gray-600">Weight: 55 kg</p>
@@ -88,7 +88,7 @@ const Dashboard = () => {
         </div>
       ) : (
         // Detailed view for "Digital" mode
-        <div className="mt-6 bg-white shadow p-6 rounded-lg">
+        <div className="mt-6 bg-white p-6 rounded-lg">
           <h2 className="text-xl font-semibold text-gray-800">Jeel Patel</h2>
           <p className="text-gray-600">Age: 20</p>
           <p className="text-gray-600">Weight: 55 kg</p>
@@ -163,7 +163,7 @@ const Dashboard = () => {
 
             {/* Add more button */}
             <div className="flex justify-start mt-4">
-              <button onClick={addMedicine} className="bg-gray-100 px-4 py-2 rounded-lg shadow">
+              <button onClick={addMedicine} className="bg-gray-100 px-4 py-2 rounded-lg">
                 + Add more
               </button>
             </div>

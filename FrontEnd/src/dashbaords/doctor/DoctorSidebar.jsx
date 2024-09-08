@@ -26,7 +26,7 @@ const DoctorSidebar = () => {
       </div>
       <nav className="flex-grow text-gray-600  py-4 px-6">
         <ul className='flex flex-col gap-4'>
-          <li className={`p-3 rounded-xl ${path == "/hospital/dashboard"  ? "bg-primary text-white" : ""}  `}>
+          <li className={`p-3 rounded-xl ${path == "/doctor/dashboard"  ? "bg-primary text-white" : ""}  `}>
             <Link
               to="./dashboard"
             >
@@ -36,7 +36,7 @@ const DoctorSidebar = () => {
               </div>
             </Link>
           </li>
-          <li className={`p-3 rounded-xl ${path == "/hospital/doctors" ? "bg-primary text-white" : ""}  `}>
+          <li className={`p-3 rounded-xl ${path == "/doctor/Appointments" ? "bg-primary text-white" : ""}  `}>
             <Link
               to="./Appointments"
 
@@ -47,7 +47,7 @@ const DoctorSidebar = () => {
               </div>
             </Link>
           </li>
-          <li className={`p-3 rounded-xl ${path == "/hospital/register-patient"  ? "bg-primary text-white" : ""}  `}>
+          <li className={`p-3 rounded-xl ${path == "/doctor/Admitted"  ? "bg-primary text-white" : ""}  `}>
             <Link
               to="./Admitted"
 

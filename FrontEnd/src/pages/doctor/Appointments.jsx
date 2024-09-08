@@ -4,7 +4,7 @@ const Appointments = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-2">
       {/* Header Section */}
-      <div className="flex justify-between items-center bg-white shadow p-4 rounded-lg">
+      <div className="flex justify-between items-center bg-white p-4 rounded-lg">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Dr. Raghav Patel</h1>
           <p className="text-sm text-gray-600">M.B.B.S, M.D</p>
@@ -15,7 +15,7 @@ const Appointments = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="mt-6 bg-white shadow p-4 rounded-lg flex justify-between items-center text-center">
+      <div className="mt-6 bg-white p-4 rounded-lg flex justify-between items-center text-center">
         <div className="w-1/2 border-r-2">
           <p className="text-gray-700">Completed Appointments</p>
           <p className="text-red-500 text-2xl font-bold">9</p>
@@ -27,7 +27,7 @@ const Appointments = () => {
       </div>
 
       {/* Patient List Table */}
-      <div className="mt-6 bg-white shadow p-4 rounded-lg overflow-x-auto">
+      <div className="mt-6 bg-white p-4 rounded-lg overflow-x-auto">
         <table className="min-w-full table-auto">
           <thead className="bg-gray-100 text-gray-700">
             <tr>

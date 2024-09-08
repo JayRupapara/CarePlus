@@ -36,7 +36,7 @@ const PatientSidebar = () => {
               </div>
             </Link>
           </li>
-          <li className={`p-4 rounded-xl ${path == "/faculty/add-quiz" ? "bg-white shadow-2xl text-secondary" : ""}  `}>
+          <li className={`p-4 rounded-xl ${path == "/patient/appointments" ? "bg-primary text-white" : ""}  `}>
             <Link
               to="./appointments"
 
@@ -47,7 +47,7 @@ const PatientSidebar = () => {
               </div>
             </Link>
           </li>
-          <li className={`p-4 rounded-xl ${path == "/faculty/manage-quiz" || path == "/faculty/view-quiz/" || path == "/faculty/view-quiz/:id" || path == "/faculty/view-data" ? "bg-white shadow-2xl text-secondary" : ""}  `}>
+          <li className={`p-4 rounded-xl ${path == "/patient/labreports" ? "bg-primary text-white" : ""} `}>
             <Link
               to="./labreports"
 
@@ -69,7 +69,7 @@ const PatientSidebar = () => {
               </div>
             </Link>
           </li> */}
-          <li className={`p-4 rounded-xl ${path == "/faculty/system-feedbacks" ? "bg-white text-secondary" : ""}  `}>
+          <li className={`p-4 rounded-xl ${path == "/patient/settings" ? "bg-primary text-white" : ""}  `}>
             <Link
               to="./settings"
 
