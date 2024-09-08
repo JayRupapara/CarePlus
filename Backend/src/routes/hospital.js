@@ -178,28 +178,52 @@ router.get('/todays-patients/:hospitalId', verifyToken, checkRole('hospital'), (
   const hospitalId = req.params.hospitalId;
   const today = new Date().toISOString().split('T')[0];
 
+  // First query: Count total patients and today's registered patients, grouped by status
   const query = `
       SELECT 
           COUNT(*) AS todayRegisteredPatients,
           (SELECT COUNT(*) FROM PatientDetails) AS totalPatients,
-          JSON_ARRAYAGG(
-              JSON_OBJECT(
-                  'patientName', Pname,
-                  'gender', Pgender,
-                  'registrationTime', created_at
-              )
-          ) AS patientList
+          (SELECT COUNT(*) FROM appointment WHERE HID = ? AND status = 'pending') AS pendingPatients,
+          (SELECT COUNT(*) FROM appointment WHERE HID = ? AND status = 'active') AS activePatients,
+          (SELECT COUNT(*) FROM appointment WHERE HID = ? AND status = 'completed') AS completedPatients
       FROM PatientDetails
       WHERE DATE(created_at) = ? AND HID = ?`;
 
-  pool.query(query, [today, hospitalId], (error, results) => {
+  connection.query(query, [hospitalId, hospitalId, hospitalId, today, hospitalId], (error, results) => {
       if (error) {
           console.error(error);
           return res.status(500).json({ error: 'Error fetching today\'s patients' });
       }
-      res.json(results[0]);
+
+      // Second query: Get the list of today's patients with their status
+      const patientListQuery = `
+        SELECT 
+            pd.Pname AS patientName, 
+            pd.Pgender AS gender, 
+            pd.created_at AS registrationTime, 
+            pa.status AS patientStatus 
+        FROM PatientDetails pd
+        JOIN appointment pa ON pd.PID = pa.PID
+        WHERE DATE(pd.created_at) = ? AND pa.HID = ?`;
+
+      connection.query(patientListQuery, [today, hospitalId], (error, patientResults) => {
+          if (error) {
+              console.error(error);
+              return res.status(500).json({ error: 'Error fetching patient list' });
+          }
+
+          res.json({
+              todayRegisteredPatients: results[0].todayRegisteredPatients,
+              totalPatients: results[0].totalPatients,
+              pendingPatients: results[0].pendingPatients,
+              activePatients: results[0].activePatients,
+              completedPatients: results[0].completedPatients,
+              patientList: patientResults
+          });
+      });
   });
 });
+
 
 
 

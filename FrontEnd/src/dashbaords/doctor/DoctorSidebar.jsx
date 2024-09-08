@@ -1,9 +1,9 @@
-import React from 'react';
+// import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HiHome, HiPlusCircle, HiBookOpen, HiChatAlt, HiLogout } from 'react-icons/hi';
+import { HiLogout } from 'react-icons/hi';
 import { MdSpaceDashboard } from "react-icons/md";
 import { FaUserDoctor, FaUsers } from "react-icons/fa6";
-import { IoMdSettings } from "react-icons/io";
+// import { IoMdSettings } from "react-icons/io";
 import logo from '../../assets/Logo2.png'
 
 const DoctorSidebar = () => {
@@ -38,12 +38,12 @@ const DoctorSidebar = () => {
           </li>
           <li className={`p-3 rounded-xl ${path == "/hospital/doctors" ? "bg-primary text-white" : ""}  `}>
             <Link
-              to="./WaitingList"
+              to="./Appointments"
 
             >
               <div className="flex items-center space-x-2">
                 <FaUserDoctor className="w-5 h-5" />
-                <span>Waiting List</span>
+                <span>Appointments</span>
               </div>
             </Link>
           </li>

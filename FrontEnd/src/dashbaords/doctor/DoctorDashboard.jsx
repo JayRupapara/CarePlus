@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 // import { parseJwt } from '../model/JwtDecode';
 import DoctorSidebar from './DoctorSidebar';
 import Dashboard from '../../pages/doctor/Dashboard';
-import WaitingList from '../../pages/doctor/WaitingList';
+import Appointments from '../../pages/doctor/Appointments';
 import Admitted from '../../pages/doctor/Admitted';
 
 
@@ -64,7 +64,7 @@ function DoctorDashboard() {
               <h2 className='font-semibold  sm:text-2xl text-lg'>
                 <Routes>
                   <Route path='/dashboard' element={'Dashboard'}></Route>
-                  <Route path='/WaitingList' element={'WaitingList'}></Route>
+                  <Route path='/Appointments' element={'Appointments'}></Route>
                   <Route path='/Admitted' element={'Admitted'}></Route>
                   {/* <Route path='/register-patient' element={'Register Patient'}></Route>
                   <Route exact path='/view-quiz/:id' element={'View Quiz'}></Route>
@@ -91,7 +91,7 @@ function DoctorDashboard() {
               <Routes>
                 <Route path='/' element={<Dashboard />}></Route>
                 <Route path='/dashboard' element={<Dashboard />}></Route>
-                <Route path='/WaitingList' element={<WaitingList/>}></Route>
+                <Route path='/Appointments' element={<Appointments/>}></Route>
                 <Route path='/admitted' element={<Admitted/>}></Route>
                 {/* <Route path='/doctors' element={<Doctors/>}></Route> */}
                 {/* <Route path='/register-patient' element={<RegisterNewPatient/>}></Route> */}

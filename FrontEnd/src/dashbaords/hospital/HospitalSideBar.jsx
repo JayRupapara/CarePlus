@@ -1,6 +1,6 @@
-import React from 'react';
+// import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HiHome, HiPlusCircle, HiBookOpen, HiChatAlt, HiLogout } from 'react-icons/hi';
+import { HiChatAlt, HiLogout } from 'react-icons/hi';
 import { MdSpaceDashboard } from "react-icons/md";
 import { FaUserDoctor, FaUsers } from "react-icons/fa6";
 import { IoMdSettings } from "react-icons/io";
