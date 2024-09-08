@@ -26,8 +26,8 @@ const LabReports = () => {
   return (
     <div className="w-full max-w-7xl mx-auto p-6">
       {/* Main Container */}
-      <h2 className="text-2xl font-semibold text-red-500 mb-4">Lab Report History</h2>
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Lab Report History</h2>
+      <div className="Main bg-white rounded-2xl shadow border border-gray-50 p-6">
         <div className="overflow-x-auto">
           <table className="w-full table-auto">
             <thead>
