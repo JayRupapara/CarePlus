@@ -231,23 +231,71 @@ function generateOTP() {
   
   
   router.post('/register_hospital', (req, res) => {
-    const { Hname,	Hemail,	Hpassword,	Hphone_number,	Hregistered_number,	Htype,	Hadmin_name,	Hstate,	Hcity,	Haddress,	Hwebsite_url	 } = req.body;
-
+    const {
+      Hname, Hemail, Hpassword, Hphone_number, Hregistered_number, Htype,
+      Hadmin_name, Hstate, Hcity, Haddress, Hwebsite_url
+    } = req.body;
+  
+    // Check required fields
     if (!Hname || !Hemail || !Hpassword || !Hregistered_number) {
-        return res.status(400).json({ error: 'Please provide name, email, and password.' });
+      return res.status(400).json({ error: 'Please provide name, email, password, and registered number.' });
     }
-
-    // Insert user data into the database without hashing the password
-    connection.query('INSERT INTO hospital (Hname, Hemail, Hpassword, Hphone_number,Hregistered_number,Htype,Hadmin_name,Hstate,Hcity,Haddress,Hwebsite_url) VALUES (?, ?, ?,?, ?, ?,?, ?, ?,?, ?)', [name, email, password], (error, results) => {
-        if (error) {
-            if (error.code === 'ER_DUP_ENTRY') {
-                return res.status(400).json({ error: 'Email already exists.' });
-            }
-            return res.status(500).json({ error: 'Database error.' });
+  
+    const query = `INSERT INTO hospital (Hname, Hemail, Hpassword, Hphone_number, Hregistered_number, Htype, 
+                                         Hadmin_name, Hstate, Hcity, Haddress, Hwebsite_url)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  
+    connection.query(query, [Hname, Hemail, Hpassword, Hphone_number, Hregistered_number, Htype, Hadmin_name,
+                             Hstate, Hcity, Haddress, Hwebsite_url], (error, results) => {
+      if (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+          return res.status(400).json({ error: 'Email already exists.' });
         }
-
-        res.status(201).json({ message: 'User registered successfully.' });
+        return res.status(500).json({ error: 'Database error.' });
+      }
+  
+      res.status(201).json({ message: 'Hospital registered successfully.' });
     });
-});
+  });  // tested
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.post('/register-patient', (req, res) => {
+  const {
+      patientName, dob, gender, phoneNumber, abhaCard, emergencyPhoneNo,
+      emergencyName, email, address, city, state, bloodGroup,password
+  } = req.body;
+
+  // Calculate age based on dob
+  const dobDate = new Date(dob);
+  const ageDifMs = Date.now() - dobDate.getTime();
+  const ageDate = new Date(ageDifMs);
+  const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+  const query = `INSERT INTO PatientDetails (Pname, Page, Pgender, Pblood_group, Pmobile_no, 
+                 Pemergency_contact, Pemail, Paddress, Pcity, Pstate, pdob, 
+                 ABHA_card_number,Ppassword, created_at, updated_at) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
+
+  connection.query(query, [patientName, age, gender, bloodGroup, phoneNumber, emergencyPhoneNo,
+      email, address, city, state, dob, abhaCard,password], (error, results) => {
+      if (error) {
+          console.error(error);
+          return res.status(500).json({ error: 'Error registering patient' });
+      }
+      res.status(201).json({ message: 'Patient registered successfully', patientId: results.insertId });
+  });
+});  //tested
 
 module.exports = router;

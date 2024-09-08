@@ -210,6 +210,77 @@ router.post('/api/patient/register', async (req, res) => {
   });
 
 
+// 9. Patient Details API
+router.get('/patient-details/:patientId', verifyToken, checkRole('patient'), (req, res) => {
+  const patientId = req.params.patientId;
 
+  const query = `
+      SELECT 
+          pd.Pname, pd.Pdob, 
+          TIMESTAMPDIFF(YEAR, pd.Pdob, CURDATE()) AS age,
+          pd.Pgender, pd.Pblood_group, pd.Pmobile_no, pd.Pemergency_contact, 
+          pd.Pemail, pd.Paddress,
+          phi.blood_pressure, phi.systolic_pressure, phi.diastolic_pressure, 
+          phi.heart_rate, phi.bpm,
+          (SELECT JSON_OBJECT(
+              'doctorName', d.Dname,
+              'time', pa.created_at
+          )
+          FROM PatientAppointment pa
+          JOIN Doctor d ON pa.DID = d.DID
+          WHERE pa.PID = pd.PID AND pa.status = 'pending'
+          ORDER BY pa.created_at ASC
+          LIMIT 1) AS upcomingAppointment,
+          (SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                  'doctorName', d.Dname,
+                  'hospitalName', h.Hname,
+                  'date', pa.created_at
+              )
+          )
+          FROM PatientAppointment pa
+          JOIN Doctor d ON pa.DID = d.DID
+          JOIN Hospital h ON pa.HID = h.HID
+          WHERE pa.PID = pd.PID AND pa.status = 'completed'
+          ORDER BY pa.created_at DESC) AS pastAppointments
+      FROM PatientDetails pd
+      LEFT JOIN PatientHealthInfo phi ON pd.PID = phi.PID
+      WHERE pd.PID = ?`;
+
+  pool.query(query, [patientId], (error, results) => {
+      if (error) {
+          console.error(error);
+          return res.status(500).json({ error: 'Error fetching patient details' });
+      }
+      res.json(results[0]);
+  });
+});
+
+
+
+// 10. Appointment History API
+router.get('/appointment-history/:patientId', verifyToken, checkRole('patient'), (req, res) => {
+  const patientId = req.params.patientId;
+
+  const query = `
+      SELECT 
+          h.Hname AS hospitalName,
+          d.Dname AS doctorName,
+          pa.created_at AS appointmentDate,
+          pa.status
+      FROM PatientAppointment pa
+      JOIN Hospital h ON pa.HID = h.HID
+      JOIN Doctor d ON pa.DID = d.DID
+      WHERE pa.PID = ?
+      ORDER BY pa.created_at DESC`;
+
+  pool.query(query, [patientId], (error, results) => {
+      if (error) {
+          console.error(error);
+          return res.status(500).json({ error: 'Error fetching appointment history' });
+      }
+      res.json(results);
+  });
+});
 
 module.exports = router;
