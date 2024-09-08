@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Route, Routes, useNavigate } from 'react-router-dom';
-// import { parseJwt } from '../model/JwtDecode';
 import { FaUserAlt } from "react-icons/fa";
 import PatientSidebar from './PatientSideBar';
 import Dashboard from '../../pages/patient/dashboard';
 import Appointments from '../../pages/patient/Appointments';
 import LabReports from '../../pages/patient/labreports';
 import Settings from '../../pages/patient/settings';
+import { parseJwt } from '../../models/JwtDecode';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 
@@ -15,40 +16,43 @@ import Settings from '../../pages/patient/settings';
 function PatientDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [UserName, setUserName] = useState("Raj Markana");
+  const [UserId, setUserId] = useState(null);
   const navigate = useNavigate();
+
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // const handleAuthUser = async()=>{
+  const handleAuthUser = async () => {
 
-  //   if(localStorage.getItem("token")){
-  //     const token = localStorage.getItem("token");
-  //     const parse = parseJwt(token);
-  //     setUserName(parse.username);
+    if (localStorage.getItem("PatientToken")) {
+      const token = localStorage.getItem("PatientToken");
+      const parse = parseJwt(token);
+      // console.log(parse);
 
-  //     if(parse.role=="Student"){
-  //       navigate("/student");
-  //     }      
-  //     else if(parse.role=="Faculty"){
-  //       navigate("/faculty");
-  //     }
-  //     else{
-  //       navigate("/");
-  //     }
-  //   }
-  //   else{
-  //     navigate("/");
-  //   }
-  // } 
+      if (parse.role == "patient") {
+        setUserId(parse.id);
+      
 
-  // useEffect(() => {
-  //   handleAuthUser();
-  //   if (screen.width < 960) {
-  //     setSidebarOpen(false)
-  // }
-  // },[navigate])
+      }
+      else {
+        toast.error("Invalid User! Login Again..");
+        navigate("/");
+      }
+    }
+    else {
+      navigate("/");
+    }
+  }
+
+
+  useEffect(() => {
+    handleAuthUser();
+    if (screen.width < 960) {
+      setSidebarOpen(false)
+    }
+  }, [navigate])
 
 
 
@@ -91,8 +95,8 @@ function PatientDashboard() {
                 {/* This route redirects /patient to /patient/dashboard */}
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/appointments" element={<Appointments/>} />
-                <Route path="/labreports" element={<LabReports/>} />
+                <Route path="/appointments" element={<Appointments />} />
+                <Route path="/labreports" element={<LabReports />} />
                 {/* <Route path="/notification" element={<Notification />} /> */}
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={'Dashboard'} />
@@ -101,6 +105,7 @@ function PatientDashboard() {
           </div>
 
         </div>
+        <Toaster position="top-center" reverseOrder={false} />
       </ div>
     </>
   );

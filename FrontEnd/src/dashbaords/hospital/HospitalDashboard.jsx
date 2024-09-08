@@ -1,51 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Route, Routes, useNavigate } from 'react-router-dom';
-// import { parseJwt } from '../model/JwtDecode';
 import HospitalSidebar from './HospitalSideBar';
 import { FaHospital } from "react-icons/fa6";
 import Dashboard from '../../pages/hospital/dashboard';
 import Doctors from '../../pages/hospital/Doctors';
 import RegisterNewPatient from '../../pages/hospital/RegisterNewPatient';
+import { parseJwt } from '../../models/JwtDecode';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 function HospitalDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [UserName, setUserName] = useState("Raj Hospital");
+  const [UserId, setUserId] = useState(null);
   const navigate = useNavigate();
+
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // const handleAuthUser = async()=>{
+  const handleAuthUser = async () => {
 
-  //   if(localStorage.getItem("token")){
-  //     const token = localStorage.getItem("token");
-  //     const parse = parseJwt(token);
-  //     setUserName(parse.username);
+    if (localStorage.getItem("HospitalToken")) {
+      const token = localStorage.getItem("HospitalToken");
+      const parse = parseJwt(token);
+      // console.log(parse);
 
-  //     if(parse.role=="Student"){
-  //       navigate("/student");
-  //     }      
-  //     else if(parse.role=="Faculty"){
-  //       navigate("/faculty");
-  //     }
-  //     else{
-  //       navigate("/");
-  //     }
-  //   }
-  //   else{
-  //     navigate("/");
-  //   }
-  // } 
+      if (parse.role == "hospital") {
+        setUserId(parse.id);
+      
 
-  // useEffect(() => {
-  //   handleAuthUser();
-  //   if (screen.width < 960) {
-  //     setSidebarOpen(false)
-  // }
-  // },[navigate])
+      }
+      else {
+        toast.error("Invalid User! Login Again..");
+        navigate("/");
+      }
+    }
+    else {
+      navigate("/");
+    }
+  }
+
+
+  useEffect(() => {
+    handleAuthUser();
+    if (screen.width < 960) {
+      setSidebarOpen(false)
+    }
+  }, [navigate])
 
 
 
@@ -90,8 +94,8 @@ function HospitalDashboard() {
               <Routes>
                 <Route path='/' element={<Dashboard />}></Route>
                 <Route path='/dashboard' element={<Dashboard />}></Route>
-                <Route path='/doctors' element={<Doctors/>}></Route>
-                <Route path='/register-patient' element={<RegisterNewPatient/>}></Route>
+                <Route path='/doctors' element={<Doctors />}></Route>
+                <Route path='/register-patient' element={<RegisterNewPatient />}></Route>
                 <Route exact path='/view-quiz/:id' element={'Dashboard'}></Route>
                 <Route path='/manage-feedbacks' element={'Dashboard'}></Route>
                 <Route path='/view-data/:id' element={'Dashboard'}></Route>
@@ -103,6 +107,7 @@ function HospitalDashboard() {
           </div>
 
         </div>
+        <Toaster position="top-center" reverseOrder={false} />
       </ div>
     </>
   );

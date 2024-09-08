@@ -27,7 +27,7 @@ const Appointments = () => {
     <div className="w-full max-w-7xl mx-auto p-6">
       {/* Main Container */}
       <h2 className="text-2xl font-semibold mb-4 text-center">Your Appointment History</h2>
-      <div className="Main bg-white rounded-2xl shadow border border-gray-50 p-6">
+      <div className="Main bg-white rounded-2xl  border border-gray-50 p-6">
         <div className="overflow-x-auto">
           <table className="w-full table-auto">
             <thead>

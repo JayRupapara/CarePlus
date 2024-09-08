@@ -182,7 +182,7 @@ const Navbar = () => {
               <li>
                 <button
                   onClick={() => setShowLoginDropdown(!showLoginDropdown)}
-                  className="block w-full px-4 py-2 text-secondary hover:text-primary"
+                  className="block px-4 py-2 text-secondary hover:text-primary"
                 >
                   Login
                 </button>
@@ -209,7 +209,7 @@ const Navbar = () => {
                     setShowRegisterDropdown(!showRegisterDropdown);
                     setActiveLink('register');
                   }}
-                  className="block w-full px-4 py-2 text-secondary hover:text-primary"
+                  className="block px-4 py-2 text-secondary hover:text-primary"
                 >
                   Register
                 </button>

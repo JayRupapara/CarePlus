@@ -241,23 +241,36 @@ function generateOTP() {
         !adminName || !hospitalState || !hospitalCity || !hospitalAddress || !hospitalWebsite) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
-
-    const query = `INSERT INTO hospital (Hname, Hemail, Hpassword, Hphone_number, Hregistered_number, Htype, 
-                                         Hadmin_name, Hstate, Hcity, Haddress, Hwebsite_url)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   
-    connection.query(query, [hospitalName, email, password, phoneNumber, registrationNumber, hospitalType, adminName,
-      hospitalState, hospitalCity, hospitalAddress, hospitalWebsite], (error, results) => {
+    // Check if email or phone number already exists
+    const checkQuery = `SELECT * FROM hospital WHERE Hemail = ? OR Hphone_number = ?`;
+    connection.query(checkQuery, [email, phoneNumber], (error, results) => {
       if (error) {
-        if (error.code === 'ER_DUP_ENTRY') {
-          return res.status(400).json({ error: 'Email already exists.' });
-        }
+        console.error(error);
         return res.status(500).json({ error: 'Database error.' });
       }
   
-      res.status(201).json({ message: 'Hospital registered successfully.' , HID : results.insertId });
+      if (results.length > 0) {
+        return res.status(400).json({ error: 'Email or phone number already exists.' });
+      }
+  
+      // If email and phone number are unique, proceed with insertion
+      const query = `INSERT INTO hospital (Hname, Hemail, Hpassword, Hphone_number, Hregistered_number, Htype, 
+                                           Hadmin_name, Hstate, Hcity, Haddress, Hwebsite_url)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  
+      connection.query(query, [hospitalName, email, password, phoneNumber, registrationNumber, hospitalType, adminName,
+        hospitalState, hospitalCity, hospitalAddress, hospitalWebsite], (insertError, results) => {
+        if (insertError) {
+          console.error(insertError);
+          return res.status(500).json({ error: 'Database error during registration.' });
+        }
+  
+        res.status(200).json({ message: 'Hospital registered successfully.', HID: results.insertId });
+      });
     });
-});
+  });
+  
 
 
 
@@ -271,36 +284,54 @@ function generateOTP() {
 
 
 
-  router.post('/register-patient', (req, res) => {
-    const {
-        patientName, dob, gender, phoneNumber, abhaCardNumber, emergencyPhoneNumber,
-        emergencyContactName , email, address, city, state, bloodGroup, password
-    } = req.body;
+router.post('/register-patient', (req, res) => {
+  const {
+    patientName, dob, gender, phoneNumber, abhaCardNumber, emergencyPhoneNumber,
+    emergencyContactName, email, address, city, state, bloodGroup, password
+  } = req.body;
 
-    // Validate required fields
-    if (!patientName || !dob || !gender || !phoneNumber || !abhaCardNumber || !emergencyPhoneNumber || !emergencyContactName || !email || !address || !city || !state || !bloodGroup || !password) {
-        return res.status(400).json({ error: 'All fields are required' });
+  // Validate required fields
+  if (!patientName || !dob || !gender || !phoneNumber || !abhaCardNumber || !emergencyPhoneNumber ||
+      !emergencyContactName || !email || !address || !city || !state || !bloodGroup || !password) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  // Calculate age based on dob
+  const dobDate = new Date(dob);
+  const ageDifMs = Date.now() - dobDate.getTime();
+  const ageDate = new Date(ageDifMs);
+  const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+  // Check if phone number or email already exists
+  const checkQuery = `SELECT * FROM PatientDetails WHERE Pmobile_no = ? OR Pemail = ?`;
+
+  connection.query(checkQuery, [phoneNumber, email], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Database error.' });
     }
 
-    // Calculate age based on dob
-    const dobDate = new Date(dob);
-    const ageDifMs = Date.now() - dobDate.getTime();
-    const ageDate = new Date(ageDifMs);
-    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+    if (results.length > 0) {
+      // If phone or email already exists, return an error
+      return res.status(400).json({ error: 'Phone number or email already registered.' });
+    }
 
+    // Insert new patient record if phone and email are not found
     const query = `INSERT INTO PatientDetails (Pname, Page, Pgender, Pblood_group, Pmobile_no, 
-                    Pemergency_contact,Pemergency_name, Pemail, Paddress, Pcity, Pstate, pdob, 
-                    ABHA_card_number, Ppassword, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
+                     Pemergency_contact, Pemergency_name, Pemail, Paddress, Pcity, Pstate, pdob, 
+                     ABHA_card_number, Ppassword, created_at, updated_at) 
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
 
-    connection.query(query, [patientName, age, gender, bloodGroup, phoneNumber, emergencyPhoneNumber, emergencyContactName, 
-        email, address, city, state, dob, abhaCardNumber, password], (error, results) => {
-        if (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Error registering patient' });
-        }
-        res.status(201).json({ message: 'Patient registered successfully', patientId: results.insertId });
+    connection.query(query, [patientName, age, gender, bloodGroup, phoneNumber, emergencyPhoneNumber,
+      emergencyContactName, email, address, city, state, dob, abhaCardNumber, password], (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Error registering patient' });
+      }
+      res.status(200).json({ message: 'Patient registered successfully', patientId: results.insertId });
     });
+  });
 });
+
 
 module.exports = router;

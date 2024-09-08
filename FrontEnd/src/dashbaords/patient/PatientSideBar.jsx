@@ -15,7 +15,7 @@ const PatientSidebar = () => {
   const handleLogout = async () => {
     localStorage.removeItem("token");
     localStorage.clear();
-    navigate("/")
+    navigate("/login-patient")
   }
 
 

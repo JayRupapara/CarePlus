@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import Navbar from '../components/navbar';
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const RegisterHospital = () => {
+
+  const navigate = useNavigate();
+
   // Define state for form fields
   const [formData, setFormData] = useState({
     hospitalName: '',
-    hospitalType: '',
+    hospitalType: '0',
     phoneNumber: '',
     registrationNumber: '',
     hospitalWebsite: '',
     adminName: '',
-    hospitalState: '',
-    hospitalCity: '',
+    hospitalState: '0',
+    hospitalCity: '0',
     hospitalAddress: '',
     email: '',
     password: ''
@@ -29,18 +37,36 @@ const RegisterHospital = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      const response = await fetch('http://localhost:5000/api/hospitals/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+    console.log(formData);
+
+    if(formData.hospitalState == "0" || formData.hospitalCity == "0" || formData.hospitalType == "0"){
+      toast("Select Dropdown Value", {
+        icon: '⚠️',
+        style: {
+          'borderRadius': '15px'
+        }
       });
+      return
       
-      if (response.ok) {
-        alert('Hospital registered successfully!');
+    
+    }
+
+    try {
+      const response = await axios.post(
+        'http://'+ import.meta.env.VITE_DB_HOST +'/api/register/register_hospital',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      
+      console.log(response);
+      
+      
+      if (response.status==201) {
+        toast.success("Hospital registered successfully!")
         setFormData({  // Reset form data
           hospitalName: '',
           hospitalType: '',
@@ -54,12 +80,19 @@ const RegisterHospital = () => {
           email: '',
           password: ''
         });
+        navigate("/login-hospital")
       } else {
-        const errorData = await response.json();
-        alert('Error: ' + errorData.message);
+        toast("Please Fill All the Fields !", {
+          icon: '⚠️',
+          style: {
+            'borderRadius': '15px'
+          }
+        });
       }
     } catch (error) {
-      alert('An error occurred: ' + error.message);
+      // console.log(error.response.data.error);
+      
+      toast.error(error.response.data.error)
     }
   };
 
@@ -90,7 +123,7 @@ const RegisterHospital = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option selected disabled>Select Hospital Type</option>
+                <option value="0" selected>Select Hospital Type</option>
                 <option value="Government">Government</option>
                 <option value="Private">Private</option>
               </select>
@@ -147,7 +180,7 @@ const RegisterHospital = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option selected disabled>Select State</option>
+                <option value="0" selected>Select State</option>
                 <option value="Gujarat">Gujarat</option>
                 <option value="Delhi">Delhi</option>
               </select>
@@ -160,7 +193,7 @@ const RegisterHospital = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option selected disabled>Select City</option>
+                <option value="0" selected>Select City</option>
                 <option value="Rajkot">Rajkot</option>
                 <option value="Surat">Surat</option>
                 <option value="Ahmadabad">Ahmadabad</option>
@@ -210,6 +243,7 @@ const RegisterHospital = () => {
           </form>
         </div>
       </div>
+      <Toaster position="top-center"  reverseOrder={false} />
     </>
   );
 };

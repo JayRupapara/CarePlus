@@ -6,12 +6,14 @@ import L2 from "../assets/L22.jpg"; // Import L2.jpeg (local image)
 import { AiOutlineSchedule } from 'react-icons/ai';  // Make Appointment Icon
 import { FaRobot } from 'react-icons/fa';  // Virtual AI Assist Icon
 import { GiMedicines } from 'react-icons/gi';  // Online Pharmacy Icon
+import Chatbot from "../components/ChatBot";
 
 
 
 const Home = () => {
   return (
     <div className="flex h-screen flex-col">
+      <Chatbot/>
       {/* Header */}
       <Navbar /> {/* Use Navbar Component */}
       {/* Main Content */}

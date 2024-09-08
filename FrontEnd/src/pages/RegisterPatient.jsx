@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import Navbar from '../components/navbar';
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const RegisterPatient = () => {
+  const navigate = useNavigate();
   // Define state for form fields
   const [formData, setFormData] = useState({
     patientName: '',
     dob: '',
-    gender: '',
+    gender: '0',
     phoneNumber: '',
     abhaCardNumber: '',
     emergencyPhoneNumber: '',
     emergencyContactName: '',
     email: '',
     address: '',
-    city: '',
-    state: '',
+    city: '0',
+    state: '0',
+    bloodGroup: '0',
     password: ''
   });
 
@@ -30,18 +36,31 @@ const RegisterPatient = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      const response = await fetch('http://localhost:5000/api/patients/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+
+    if (formData.bloodGroup == "0" || formData.city == "0" || formData.state == "0" || formData.gender == "0") {
+      toast("Select Dropdown Value", {
+        icon: '⚠️',
+        style: {
+          'borderRadius': '15px'
+        }
       });
-      
-      if (response.ok) {
-        alert('Patient registered successfully!');
+      return
+    }
+
+
+    try {
+      const response = await axios.post(
+        'http://'+ import.meta.env.VITE_DB_HOST +'/api/register/register-patient',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+
+      if (response.status == 201) {
+        toast.success("Patient registered successfully!")
         setFormData({  // Reset form data
           patientName: '',
           dob: '',
@@ -54,14 +73,23 @@ const RegisterPatient = () => {
           address: '',
           city: '',
           state: '',
+          bloodGroup: '',
           password: ''
         });
-      } else {
-        const errorData = await response.json();
-        alert('Error: ' + errorData.message);
+        navigate("/login-hospital")
+      } else {  
+        toast("Please Fill All the Fields !", {
+          icon: '⚠️',
+          style: {
+            'borderRadius': '15px'
+          }
+        });
+
       }
     } catch (error) {
-      alert('An error occurred: ' + error.message);
+      // console.log(error);
+      
+      toast.error(error.response.data.error)
     }
   };
 
@@ -81,6 +109,7 @@ const RegisterPatient = () => {
                 type="text"
                 name="patientName"
                 value={formData.patientName}
+                required
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Enter Full Patient Name"
@@ -93,6 +122,7 @@ const RegisterPatient = () => {
               <input
                 type="date"
                 name="dob"
+                required
                 value={formData.dob}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
@@ -105,10 +135,11 @@ const RegisterPatient = () => {
               <select
                 name="gender"
                 value={formData.gender}
+                required
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option selected disabled>Select Gender</option>
+                <option selected value="0">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -120,6 +151,7 @@ const RegisterPatient = () => {
               <label className="block text-secondary mb-2">Phone Number</label>
               <input
                 type="tel"
+                required
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
@@ -133,6 +165,7 @@ const RegisterPatient = () => {
               <label className="block text-secondary mb-2">ABHA Card Number</label>
               <input
                 type="text"
+                required
                 name="abhaCardNumber"
                 value={formData.abhaCardNumber}
                 onChange={handleInputChange}
@@ -141,10 +174,34 @@ const RegisterPatient = () => {
               />
             </div>
 
+            {/* Blood Group */}
+            <div>
+              <label className="block text-secondary mb-2">Blood Group</label>
+              <select
+              required
+                name="bloodGroup"
+                value={formData.bloodGroup}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option selected value="0">Select Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
+            </div>
+
+
             {/* Emergency Phone Number */}
             <div>
               <label className="block text-secondary mb-2">Emergency Phone Number</label>
               <input
+              required
                 type="tel"
                 name="emergencyPhoneNumber"
                 value={formData.emergencyPhoneNumber}
@@ -158,6 +215,7 @@ const RegisterPatient = () => {
             <div>
               <label className="block text-secondary mb-2">Emergency Contact Name</label>
               <input
+              required
                 type="text"
                 name="emergencyContactName"
                 value={formData.emergencyContactName}
@@ -167,24 +225,14 @@ const RegisterPatient = () => {
               />
             </div>
 
-            {/* Email */}
-            <div>
-              <label className="block text-secondary mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Enter Email"
-              />
-            </div>
+
 
             {/* Address */}
             <div className="lg:col-span-4">
               <label className="block text-secondary mb-2">Address</label>
               <textarea
                 name="address"
+                required
                 value={formData.address}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
@@ -197,12 +245,13 @@ const RegisterPatient = () => {
             <div>
               <label className="block text-secondary mb-2">City</label>
               <select
+              required
                 name="city"
                 value={formData.city}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option selected disabled>Select City</option>
+                <option selected value="0">Select City</option>
                 <option value="Rajkot">Rajkot</option>
                 <option value="Surat">Surat</option>
                 <option value="Ahmadabad">Ahmadabad</option>
@@ -213,22 +262,39 @@ const RegisterPatient = () => {
             <div>
               <label className="block text-secondary mb-2">State</label>
               <select
+              required
                 name="state"
                 value={formData.state}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option selected disabled>Select State</option>
+                <option selected value="0">Select State</option>
                 <option value="Gujarat">Gujarat</option>
                 <option value="Delhi">Delhi</option>
               </select>
             </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-secondary mb-2">Email</label>
+              <input
+                type="email"
+                required
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder="Enter Email"
+              />
+            </div>
+
 
             {/* Password */}
             <div>
               <label className="block text-secondary mb-2">Password</label>
               <input
                 type="password"
+                required
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
@@ -249,6 +315,7 @@ const RegisterPatient = () => {
           </form>
         </div>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </>
   );
 };
