@@ -5,6 +5,7 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import logo from '../../assets/Logo2.png'
 
+
 const PatientSidebar = () => {
   const location = useLocation();
   const path = location.pathname;
@@ -37,7 +38,7 @@ const PatientSidebar = () => {
           </li>
           <li className={`p-4 rounded-xl ${path == "/faculty/add-quiz" ? "bg-white shadow-2xl text-secondary" : ""}  `}>
             <Link
-              to="./add-quiz"
+              to="./appointments"
 
             >
               <div className="flex items-center space-x-2">
@@ -48,7 +49,7 @@ const PatientSidebar = () => {
           </li>
           <li className={`p-4 rounded-xl ${path == "/faculty/manage-quiz" || path == "/faculty/view-quiz/" || path == "/faculty/view-quiz/:id" || path == "/faculty/view-data" ? "bg-white shadow-2xl text-secondary" : ""}  `}>
             <Link
-              to="./manage-quiz"
+              to="./labreports"
 
             >
               <div className="flex items-center space-x-2">
@@ -59,23 +60,23 @@ const PatientSidebar = () => {
           </li>
           <li className={`p-4 rounded-xl ${path == "/faculty/manage-feedbacks" ? "bg-white shadow-2xl text-secondary" : ""}  `}>
             <Link
-              to="./manage-feedbacks"
+              to="./notification"
 
             >
               <div className="flex items-center space-x-2">
                 <HiChatAlt className="w-5 h-5" />
-                <span>Events</span>
+                <span>Notification</span>
               </div>
             </Link>
           </li>
           <li className={`p-4 rounded-xl ${path == "/faculty/system-feedbacks" ? "bg-white text-secondary" : ""}  `}>
             <Link
-              to="./system-feedbacks"
+              to="./settings"
 
             >
               <div className="flex items-center space-x-2">
                 <IoMdSettings className="w-5 h-5" />
-                <span>Students</span>
+                <span>Settings</span>
               </div>
             </Link>
           </li>
