@@ -9,7 +9,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Mobile menu toggle
 
   return (
-    <header className="sticky top-0 z-10 bg-white border-2">
+    <header className="sticky top-0 z-10 bg-white">
       <div className="container mx-auto flex items-center justify-between px-6 py-8">
         {/* Logo */}
         <div className="flex items-center">
