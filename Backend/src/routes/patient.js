@@ -20,42 +20,60 @@ const connection = mysql.createConnection({
 
 
 
-router.post('/api/patient/register', async (req, res) => {
-    try {
-      const {
-        Pname, dob, Page, Pgender, Pblood_group, Pmobile_no,
-        Pemergency_contact, Pemail, Paddress,
-        blood_pressure, systolic_pressure, diastolic_pressure, heart_rate, bpm
-      } = req.body;
-  
-      const conn = await pool.getConnection();
-      await conn.beginTransaction();
-  
+    router.post('/api/patient/register', async (req, res) => {
       try {
-        const [patientResult] = await conn.execute(
-          'INSERT INTO PatientDetails (Pname, Page, Pgender, Pblood_group, Pmobile_no, Pemergency_contact, Pemail, Paddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          [Pname, Page, Pgender, Pblood_group, Pmobile_no, Pemergency_contact, Pemail, Paddress]
-        );
-  
-        const patientId = patientResult.insertId;
-  
-        await conn.execute(
-          'INSERT INTO PatientHealthInfo (PID, blood_pressure, systolic_pressure, diastolic_pressure, heart_rate, bpm) VALUES (?, ?, ?, ?, ?, ?)',
-          [patientId, blood_pressure, systolic_pressure, diastolic_pressure, heart_rate, bpm]
-        );
-  
-        await conn.commit();
-        res.status(201).json({ message: 'Patient registered successfully', patientId });
+        const {
+          Pname, dob, Pgender, Pblood_group, Pmobile_no,
+          Pemergency_contact, Pemail, Paddress,
+          blood_pressure, systolic_pressure, diastolic_pressure, heart_rate, bpm
+        } = req.body;
+    
+        // Validate required fields
+        if (!Pname || !dob || !Pgender || !Pblood_group || !Pmobile_no ||
+            !Pemergency_contact || !Pemail || !Paddress || !blood_pressure || 
+            !systolic_pressure || !diastolic_pressure || !heart_rate || !bpm) {
+          return res.status(400).json({ error: 'All fields are required' });
+        }
+    
+        // Calculate age
+        const dobDate = new Date(dob);
+        const today = new Date();
+        let Page = today.getFullYear() - dobDate.getFullYear();
+        const monthDiff = today.getMonth() - dobDate.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+          Page--;
+        }
+    
+        const conn = await pool.getConnection();
+        await conn.beginTransaction();
+    
+        try {
+          const [patientResult] = await conn.execute(
+            'INSERT INTO PatientDetails (Pname, Page, Pgender, Pblood_group, Pmobile_no, Pemergency_contact, Pemail, Paddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [Pname, Page, Pgender, Pblood_group, Pmobile_no, Pemergency_contact, Pemail, Paddress]
+          );
+    
+          const patientId = patientResult.insertId;
+    
+          await conn.execute(
+            'INSERT INTO PatientHealthInfo (PID, blood_pressure, systolic_pressure, diastolic_pressure, heart_rate, bpm) VALUES (?, ?, ?, ?, ?, ?)',
+            [patientId, blood_pressure, systolic_pressure, diastolic_pressure, heart_rate, bpm]
+          );
+    
+          await conn.commit();
+          res.status(201).json({ message: 'Patient registered successfully', patientId });
+        } catch (error) {
+          await conn.rollback();
+          throw error;
+        } finally {
+          conn.release();
+        }
       } catch (error) {
-        await conn.rollback();
-        throw error;
-      } finally {
-        conn.release();
+        res.status(500).json({ error: error.message });
       }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+    });
+    
 
 
 
