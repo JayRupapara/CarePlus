@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { FaBarsStaggered } from "react-icons/fa6";
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 // import { parseJwt } from '../model/JwtDecode';
 import { FaUserAlt } from "react-icons/fa";
 import PatientSidebar from './PatientSideBar';
 import Dashboard from '../../pages/patient/dashboard';
-import Appointments from '../../pages/patient/appointments';
-import Labreports from '../../pages/patient/labreports';
+import Appointments from '../../pages/patient/Appointments';
+import LabReports from '../../pages/patient/labreports';
 import Settings from '../../pages/patient/settings';
-import Notification from '../../pages/patient/notification';
+
 
 
 
@@ -60,9 +60,9 @@ function PatientDashboard() {
           <PatientSidebar />
         </div>
 
-        <div className={`${sidebarOpen ? 'sm:col-span-5 col-span-3 ' : ' sm:col-span-6 col-span-6'}  h-screen overflow-y-auto  overflow-x-hidden`}>
+        <div className={`${sidebarOpen ? 'sm:col-span-5 col-span-3 ' : ' sm:col-span-6 col-span-6 '}  h-screen overflow-y-auto  overflow-x-hidden`}>
 
-          <div className='z-10  text-secondary flex justify-between items-center py-4 px-4 w-full  bg-white'>
+          <div className='text-secondary relative z-10 flex justify-between items-center py-4 px-4 w-full  bg-white'>
             <div className='flex justify-center  items-center sm:gap-10 gap-5'>
               <FaBarsStaggered className='text-xl cursor-pointer ' onClick={toggleSidebar} />
               <h2 className='font-semibold  sm:text-2xl text-lg'>
@@ -70,7 +70,7 @@ function PatientDashboard() {
                   <Route path='/dashboard' element={'Home'}></Route>
                   <Route path='/appointments' element={'Appointments'}></Route>
                   <Route path='/labreports' element={'lab Reports'}></Route>
-                  <Route path='/notification' element={'Notification'}></Route>
+                  {/* <Route path='/notification' element={'Notification'}></Route> */}
                   <Route path='/settings' element={'Settings'}></Route>
                   <Route path='*' element={'logout'}></Route>
                 </Routes>
@@ -87,16 +87,16 @@ function PatientDashboard() {
 
           <div className='px-3'>
             <div className='mt-2 '>
-            <Routes>
-  {/* This route redirects /patient to /patient/dashboard */}
-  <Route path="/" element={<Navigate to="/patient/dashboard" />} />
-  <Route path="/dashboard" element={<Dashboard />} />
-  <Route path="/appointments" element={<Appointments />} />
-  <Route path="/labreports" element={<Labreports />} />
-  <Route path="/notification" element={<Notification />} />
-  <Route path="/settings" element={<Settings />} />
-  <Route path="*" element={'Dashboard'} />
-</Routes>
+              <Routes>
+                {/* This route redirects /patient to /patient/dashboard */}
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/appointments" element={<Appointments/>} />
+                <Route path="/labreports" element={<LabReports/>} />
+                {/* <Route path="/notification" element={<Notification />} /> */}
+                <Route path="/settings" element={<Settings />} />
+                <Route path="*" element={'Dashboard'} />
+              </Routes>
             </div>
           </div>
 

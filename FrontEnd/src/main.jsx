@@ -12,6 +12,8 @@ import PatientDashboard from './dashbaords/patient/PatientDashboard.jsx';
 import LoginPatient from './pages/LoginPatient.jsx';
 import LoginHospital from './pages/LoginHospital.jsx';
 import RegisterPatient from './pages/RegisterPatient.jsx';
+import Contact from './pages/Contact.jsx';
+import About from './pages/About.jsx';
 
 
 const router = createBrowserRouter([
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: "/", 
         element: <Home />,
+      },
+      {
+        path: "/contact", 
+        element: <Contact />,
+      },
+      {
+        path: "/about", 
+        element: <About />,
       },
       {
         path: "/register-hospital",

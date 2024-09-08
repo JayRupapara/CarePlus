@@ -32,6 +32,7 @@ const Navbar = () => {
             Home
           </Link>
           <Link
+          to={"/about"}
           onClick={()=>setActiveLink("about")}
             className={`${
               activeLink === 'about' ? 'text-primary ' : 'text-secondary'
@@ -41,7 +42,7 @@ const Navbar = () => {
           </Link>
           <Link
            onClick={()=>setActiveLink("contact")}
-           
+           to={"/contact"}
             className={`${
               activeLink === 'contact' ? 'text-primary ' : 'text-secondary'
               } px-4 py-2 rounded-lg hover:text-primary`}
@@ -63,13 +64,13 @@ const Navbar = () => {
                 to={"/login-patient"}
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
-                  Sign in as User
+                  Sign in as Patient
                 </Link>
                 <Link
                   to={"/login-hospital"}
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
-                  Sign in as Hospital Admin
+                  Sign in as Hospital
                 </Link>
               </div>
             )}
@@ -92,7 +93,7 @@ const Navbar = () => {
                   to={"/register-patient"}
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
-                  Register as User
+                  Register as Patient
                 </Link>
                 <Link
                   
