@@ -1,12 +1,12 @@
-// import React from 'react';
+import React from 'react';
 import { FaUserDoctor, FaBed, FaUsers } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
-
 
 const Dashboard = () => {
     return (
         <div>
-
+            <h2>Hospital Dashboard</h2>
+            <p>Welcome to the hospital dashboard. This is the main overview page for hospital administrators.</p>
             <div className='text-end mt-5'>
                 <Link to={"../register-patient"} className='mt-6 px-2 py-3 mr-4  text-white bg-primary rounded-xl ' >Register Patient</Link>
                 <Link className='mt-6 px-2 py-3   text-primary border-primary border rounded-xl '>New Appointment</Link>
