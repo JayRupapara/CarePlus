@@ -4,7 +4,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { FaUserAlt } from "react-icons/fa";
 import PatientSidebar from './PatientSideBar';
 import Dashboard from '../../pages/patient/dashboard';
-import Appointments from '../../pages/patient/Appointments';
+import Appointments from '../../pages/patient/Appointments.jsx';
 import LabReports from '../../pages/patient/labreports';
 import Settings from '../../pages/patient/settings';
 import { parseJwt } from '../../models/JwtDecode';
