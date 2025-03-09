@@ -3,7 +3,7 @@ import { FaBarsStaggered } from "react-icons/fa6";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import HospitalSidebar from './HospitalSideBar';
 import { FaHospital } from "react-icons/fa6";
-import Dashboard from '../../pages/hospital/dashboard';
+import Dashboard from "../../pages/hospital/dashboard.jsx";
 import Doctors from '../../pages/hospital/Doctors';
 import RegisterNewPatient from '../../pages/hospital/RegisterNewPatient';
 import { parseJwt } from '../../models/JwtDecode';
